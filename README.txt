@@ -37,3 +37,16 @@ should be added to the Github page:
 https://github.com/ph73nt/BritNatGridRef/issues
 
 or alternatively contact the author by email: njt@fishlegs.co.uk
+
+License
+-------
+
+This software is availble under the GPL2 (or and later GPL version).
+
+Credits
+-------
+
+The BritNatGridRef icon is supplied courtesy of flaticon:
+
+Icons made by www.flaticon.com/authors/icons8 from www.flaticon.com and is
+licensed under version 3 of the creative commons license.
