@@ -41,7 +41,7 @@ or alternatively contact the author by email: njt@fishlegs.co.uk
 License
 -------
 
-This software is availble under the GPL2 (or and later GPL version).
+This software is available under the GPL2 (or and later GPL version).
 
 Credits
 -------
