@@ -1,0 +1,125 @@
+<ui version="4.0" >
+ <class>BritNatGridRefDialogBase</class>
+ <widget class="QDialog" name="BritNatGridRefDialogBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>190</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>BritNatGridRef</string>
+  </property>
+  <widget class="QDialogButtonBox" name="button_box" >
+   <property name="geometry" >
+    <rect>
+     <x>30</x>
+     <y>150</y>
+     <width>341</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons" >
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget name="textGridRef" objectName="textGridRef" class="QLineEdit" label="Grid reference">
+    <property name="geometry">
+      <rect>
+        <x>210</x>
+        <y>50</y>
+        <width>150</width>
+        <height>25</height>
+      </rect>
+    </property>  
+    <property name="toolTip">
+      <string>Enter the British national grid reference string where your desired point is to be placed</string>
+    </property>
+  </widget>
+  <widget class="QLabel" name="lblGridRef">
+    <property name="text">
+      <string>Grid Reference:</string>
+    </property>
+    <property name="alignment">
+      <set>Qt::AlignLeft</set>
+    </property>
+    <property name="geometry">
+      <rect>
+	<x>10</x>
+	<y>55</y>
+	<width>180</width>
+	<height>25</height>
+      </rect>
+    </property>
+  </widget>
+  <widget class="QLabel" name="lblAttributes">
+    <property name="text">
+      <string>Attribute1, Attributes2, etc...:</string>
+    </property>
+    <property name="alignment">
+      <set>Qt::AlignLeft</set>
+    </property>
+    <property name="geometry">
+      <rect>
+	<x>10</x>
+	<y>87</y>
+	<width>180</width>
+	<height>25</height>
+      </rect>
+    </property>
+  </widget>
+  <widget name="textAttributes" objectName="textAttributes" class="QLineEdit" label="Attributes">
+    <property name="geometry">
+      <rect>
+        <x>210</x>
+        <y>80</y>
+        <width>150</width>
+        <height>25</height>
+      </rect>
+    </property>  
+    <property name="toolTip">
+      <string>Enter a comma delimited list of attributes to be assigned to the point (for example a label and telephone number).</string>
+    </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>button_box</sender>
+   <signal>accepted()</signal>
+   <receiver>BritNatGridRefDialogBase</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="source_label" >
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destination_label" >
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>button_box</sender>
+   <signal>rejected()</signal>
+   <receiver>BritNatGridRefDialogBase</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="source_label" >
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destination_label" >
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
