@@ -1,33 +1,39 @@
-Plugin Builder Results
+BritNatGridRef - the readme file!
 
-Your plugin BritNatGridRef was created in:
-    /home/neil/qgis/BritNatGridRef/BritNatGridRef
+Overview
+--------
 
-Your QGIS plugin directory is located at:
-    /home/neil/.qgis2/python/plugins
+BritNatGridRef is a plugin written in Python for the QGIS geographic 
+information system (www.qgis.org). The latest version of BritnatGridRef can be 
+found at the Github repository (https://github.com/ph73nt/BritNatGridRef or 
+simply search for BritNatGridref).
 
-What's Next:
+The plugin is to add a point of interest to an existing and active vector 
+layer. The user enters the grid reference of the point and then any optional 
+attributes to add to the feature (mulitple features are allowed, separated by 
+commas). To use the attributes, it should be noted that the active layer must 
+already be able to accept attributes (configurable in the "Attribute table" of 
+the active layer).
 
-  * Copy the entire directory containing your new plugin to the QGIS plugin
-    directory
+Usage
+-----
 
-  * Compile the resources file using pyrcc4
+Install the plugin in the usual location specified in the QGIS documentation. 
+The plugin is then available for the plugins menu: 
 
-  * Run the tests (``make test``)
+Plugins > BritNatGridRef > BritNatGridRef
 
-  * Test the plugin by enabling it in the QGIS plugin manager
+The user is shown a simple dialogue with text fields for the British Nation 
+Grid reference point and a second text field for optional attributes. the user 
+fills in the fields and presses enter (or clicks OK). 
 
-  * Customize it by editing the implementation file: ``BritNatGridRef.py``
+Errors and complications
+------------------------
 
-  * Create your own custom icon, replacing the default icon.png
+Several pitfalls are trapped by the plugin (for instance an incorrect grid 
+reference), but is by no means foolproof. Errors, bugs and feature requests 
+should be added to the Github page:
 
-  * Modify your user interface by opening BritNatGridRef.ui in Qt Designer
+https://github.com/ph73nt/BritNatGridRef/issues
 
-  * You can use the Makefile to compile your Ui and resource files when
-    you make changes. This requires GNU make (gmake)
-
-For more information, see the PyQGIS Developer Cookbook at:
-http://www.qgis.org/pyqgis-cookbook/index.html
-
-(C) 2011-2014 GeoApt LLC - geoapt.com
-Git revision : $Format:%H$
+or alternatively contact the author by email: njt@fishlegs.co.uk
