@@ -1,1 +1,6 @@
 *.pyc
+*.bak
+.directory
+.project
+.pydevproject
+.settings/*
