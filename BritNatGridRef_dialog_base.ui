@@ -38,6 +38,9 @@
      <height>151</height>
     </rect>
    </property>
+   <property name="currentIndex">
+    <number>1</number>
+   </property>
    <widget class="QWidget" name="tab1">
     <attribute name="title">
      <string>Single point</string>

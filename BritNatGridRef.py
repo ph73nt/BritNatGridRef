@@ -190,102 +190,113 @@ class BritNatGridRef:
             # See if OK was pressed
             if result:
                 
-                # Check if dialogue should stay open
-                self.stayOpen = self.dlg.addMore.isChecked()
+                # get tab index
+                index = self.dlg.tabWidget.currentIndex();
                 
-                # Prep error messages
-                msgBadGrid = "Sorry, I could not process the request; incorrect grid reference format"
-                msgNoLayer = "Sorry, an error occurred - check there is a writable active layer"
-              
-                # Make hashtable of eastings and northings by grid reference
-                east = {'HP':'4', 'HT':'3', 'HU':'4', 'HW':'1', 'HX':'2', 'HY':'3', 'HZ':'4', 'NA':'0', 'NB':'1', 'NC':'2', 'ND':'3', 'NF':'0', 'NG':'1', 'NH':'2', 'NJ':'3', 'NK':'4', 'NL':'0', 'NM':'1', 'NN':'2', 'NO':'3', 'NR':'1', 'NS':'2', 'NT':'3', 'NU':'4', 'NW':'1', 'NX':'2', 'NY':'3', 'NZ':'4', 'OV':'5', 'SC':'2', 'SD':'3', 'SE':'4', 'SH':'2', 'SJ':'3', 'SK':'4', 'SM':'1', 'SN':'2', 'SO':'3', 'SP':'4', 'SR':'1', 'SS':'2', 'ST':'3', 'SU':'4', 'SV':'0', 'SW':'1', 'SX':'2', 'SY':'3', 'SZ':'4', 'TA':'5', 'TF':'5', 'TG':'6', 'TL':'5', 'TM':'6', 'TQ':'5', 'TR':'6', 'TV':'5'}
-                north = {'HP':'12', 'HT':'11', 'HU':'11', 'HW':'10', 'HX':'10', 'HY':'10', 'HZ':'10', 'NA':'9', 'NB':'9', 'NC':'9', 'ND':'9', 'NF':'8', 'NG':'8', 'NH':'8', 'NJ':'8', 'NK':'8', 'NL':'7', 'NM':'7', 'NN':'7', 'NO':'7', 'NR':'6', 'NS':'6', 'NT':'6', 'NU':'6', 'NW':'5', 'NX':'5', 'NY':'5', 'NZ':'5', 'OV':'5', 'SC':'4', 'SD':'4', 'SE':'4', 'SH':'3', 'SJ':'3', 'SK':'3', 'SM':'2', 'SN':'2', 'SO':'2', 'SP':'2', 'SR':'1', 'SS':'1', 'ST':'1', 'SU':'1', 'SV':'0', 'SW':'0', 'SX':'0', 'SY':'0', 'SZ':'0', 'TA':'4', 'TF':'3', 'TG':'3', 'TL':'2', 'TM':'2', 'TQ':'1', 'TR':'1', 'TV':'0'}  
-        
-                # Check for a match
-                ref = self.dlg.textGridRef.text()
+                # Single entry
+                if index == 1:
                 
-                refLen = len(ref)
-                if refLen > 3:
+                    # Check if dialogue should stay open
+                    self.stayOpen = self.dlg.addMore.isChecked()
                     
-                    code = ref[0:2].upper()
-                    print code
+                    # Prep error messages
+                    msgBadGrid = "Sorry, I could not process the request; incorrect grid reference format"
+                    msgNoLayer = "Sorry, an error occurred - check there is a writable active layer"
+                  
+                    # Make hashtable of eastings and northings by grid reference
+                    east = {'HP':'4', 'HT':'3', 'HU':'4', 'HW':'1', 'HX':'2', 'HY':'3', 'HZ':'4', 'NA':'0', 'NB':'1', 'NC':'2', 'ND':'3', 'NF':'0', 'NG':'1', 'NH':'2', 'NJ':'3', 'NK':'4', 'NL':'0', 'NM':'1', 'NN':'2', 'NO':'3', 'NR':'1', 'NS':'2', 'NT':'3', 'NU':'4', 'NW':'1', 'NX':'2', 'NY':'3', 'NZ':'4', 'OV':'5', 'SC':'2', 'SD':'3', 'SE':'4', 'SH':'2', 'SJ':'3', 'SK':'4', 'SM':'1', 'SN':'2', 'SO':'3', 'SP':'4', 'SR':'1', 'SS':'2', 'ST':'3', 'SU':'4', 'SV':'0', 'SW':'1', 'SX':'2', 'SY':'3', 'SZ':'4', 'TA':'5', 'TF':'5', 'TG':'6', 'TL':'5', 'TM':'6', 'TQ':'5', 'TR':'6', 'TV':'5'}
+                    north = {'HP':'12', 'HT':'11', 'HU':'11', 'HW':'10', 'HX':'10', 'HY':'10', 'HZ':'10', 'NA':'9', 'NB':'9', 'NC':'9', 'ND':'9', 'NF':'8', 'NG':'8', 'NH':'8', 'NJ':'8', 'NK':'8', 'NL':'7', 'NM':'7', 'NN':'7', 'NO':'7', 'NR':'6', 'NS':'6', 'NT':'6', 'NU':'6', 'NW':'5', 'NX':'5', 'NY':'5', 'NZ':'5', 'OV':'5', 'SC':'4', 'SD':'4', 'SE':'4', 'SH':'3', 'SJ':'3', 'SK':'3', 'SM':'2', 'SN':'2', 'SO':'2', 'SP':'2', 'SR':'1', 'SS':'1', 'ST':'1', 'SU':'1', 'SV':'0', 'SW':'0', 'SX':'0', 'SY':'0', 'SZ':'0', 'TA':'4', 'TF':'3', 'TG':'3', 'TL':'2', 'TM':'2', 'TQ':'1', 'TR':'1', 'TV':'0'}  
+            
+                    # Check for a match
+                    ref = self.dlg.textGridRef.text()
+                    
+                    refLen = len(ref)
+                    if refLen > 3:
                         
-                    # Check hashtable actually returns something
-                    try:
-                        e = east[code]
-                        n = north[code]
-                        print "East: ", e, " North: ", n
-                
-                        # Should now have the northings and eastings values... now need to add some more precision
-                        metres = ref[2:]
-                        l = len(metres)
-                        print l
-                        if l & 0x1:
-                            # bad news, shouldn't have an odd number of digits... bomb out!
-                            qgis.utils.iface.messageBar().pushMessage("Error", msgBadGrid, level=QgsMessageBar.CRITICAL)
-                        else:
-                            # Good news so far... even number of digits... split 'em in half and pad with zeroes
-                            l /= 2
-                            eMetres = metres[0:l]
-                            while len(eMetres) < 5:
-                                eMetres = eMetres + "0"
-                
-                            nMetres = metres[l:]
-                            while len(nMetres) < 5:
-                                nMetres = nMetres + "0"
-                          
-                            # Add the metres onto the eastings and northings
-                            e += eMetres
-                            n += nMetres
-                            print e
-                            print n
-                        
-                            # Great... now have out coordinates in QGIS acceptable format... add a new point
-                        
-                            # Get active layer
-                            layer = qgis.utils.iface.activeLayer()
-                          
-                            caps = layer.dataProvider().capabilities()
-                            if caps:
+                        code = ref[0:2].upper()
+                        print code
                             
-                                # Declare a feature
-                                feat = QgsFeature()
-                            
-                                # Add attributes
-                                attrs = self.dlg.textAttributes.text()
-                                if len(attrs) > 0:
-                                    # Just use comma delimited attList
-                                    attList = attrs.split(",")
-                                    print attList
-                                    feat.setAttributes(attList)
-                                  
-                                # Add the points  
-                                feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(int(e), int(n))))
-                                (res, outFeats) = layer.dataProvider().addFeatures([feat])
-                                
-                                if not res:
-                                    qgis.utils.iface.messageBar().pushMessage("Error", "An error occurred adding points", level=QgsMessageBar.CRITICAL)
-                                  
-                                # Must update the UI for user to enjoy the new points  
-                                layer.triggerRepaint()  
-                                  
-                            else:
-                                # Active layer not writable
+                        # Check hashtable actually returns something
+                        try:
+                            e = east[code]
+                            n = north[code]
+                            print "East: ", e, " North: ", n
+                    
+                            # Should now have the northings and eastings values... now need to add some more precision
+                            metres = ref[2:]
+                            l = len(metres)
+                            print l
+                            if l & 0x1:
+                                # bad news, shouldn't have an odd number of digits... bomb out!
                                 qgis.utils.iface.messageBar().pushMessage("Error", msgBadGrid, level=QgsMessageBar.CRITICAL)
+                            else:
+                                # Good news so far... even number of digits... split 'em in half and pad with zeroes
+                                l /= 2
+                                eMetres = metres[0:l]
+                                while len(eMetres) < 5:
+                                    eMetres = eMetres + "0"
+                    
+                                nMetres = metres[l:]
+                                while len(nMetres) < 5:
+                                    nMetres = nMetres + "0"
                               
-                    except KeyError, e:
+                                # Add the metres onto the eastings and northings
+                                e += eMetres
+                                n += nMetres
+                                print e
+                                print n
+                            
+                                # Great... now have out coordinates in QGIS acceptable format... add a new point
+                            
+                                # Get active layer
+                                layer = qgis.utils.iface.activeLayer()
+                              
+                                caps = layer.dataProvider().capabilities()
+                                if caps:
+                                
+                                    # Declare a feature
+                                    feat = QgsFeature()
+                                
+                                    # Add attributes
+                                    attrs = self.dlg.textAttributes.text()
+                                    if len(attrs) > 0:
+                                        # Just use comma delimited attList
+                                        attList = attrs.split(",")
+                                        print attList
+                                        feat.setAttributes(attList)
+                                      
+                                    # Add the points  
+                                    feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(int(e), int(n))))
+                                    (res, outFeats) = layer.dataProvider().addFeatures([feat])
+                                    
+                                    if not res:
+                                        qgis.utils.iface.messageBar().pushMessage("Error", "An error occurred adding points", level=QgsMessageBar.CRITICAL)
+                                      
+                                    # Must update the UI for user to enjoy the new points  
+                                    layer.triggerRepaint()  
+                                      
+                                else:
+                                    # Active layer not writable
+                                    qgis.utils.iface.messageBar().pushMessage("Error", msgBadGrid, level=QgsMessageBar.CRITICAL)
+                                  
+                        except KeyError, e:
+                            qgis.utils.iface.messageBar().pushMessage("Error", msgBadGrid, level=QgsMessageBar.CRITICAL)
+                            self.stayOpen = False
+                            print e
+                          
+                        except AttributeError, e:
+                            # Occurs when no layer is selected... could occur for other reasons... let me know :)
+                            qgis.utils.iface.messageBar().pushMessage("Error", msgNoLayer, level=QgsMessageBar.CRITICAL)
+                            self.stayOpen = False
+                            print e
+                    
+                    else:
                         qgis.utils.iface.messageBar().pushMessage("Error", msgBadGrid, level=QgsMessageBar.CRITICAL)
-                        self.stayOpen = False
-                        print e
-                      
-                    except AttributeError, e:
-                        # Occurs when no layer is selected... could occur for other reasons... let me know :)
-                        qgis.utils.iface.messageBar().pushMessage("Error", msgNoLayer, level=QgsMessageBar.CRITICAL)
-                        self.stayOpen = False
-                        print e
                 
-                else:
-                    qgis.utils.iface.messageBar().pushMessage("Error", msgBadGrid, level=QgsMessageBar.CRITICAL)
+                # Add CSV file 
+                elif index == 2:
+                    
+                    index = 1
                 
             else:
                 self.stayOpen = False
