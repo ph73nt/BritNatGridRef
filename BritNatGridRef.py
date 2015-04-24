@@ -254,10 +254,10 @@ class BritNatGridRef:
                                 # Add attributes
                                 attrs = self.dlg.textAttributes.text()
                                 if len(attrs) > 0:
-                                    # Just use comma delimited list
-                                    list = attrs.split(",")
-                                    print list
-                                    feat.setAttributes(list)
+                                    # Just use comma delimited attList
+                                    attList = attrs.split(",")
+                                    print attList
+                                    feat.setAttributes(attList)
                                   
                                 # Add the points  
                                 feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(int(e), int(n))))
