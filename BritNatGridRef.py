@@ -19,17 +19,16 @@
  *                                                                         *
  ***************************************************************************/
 """
+import csv
+import os.path
+from qgis._core import QgsFeature, QgsGeometry, QgsPoint
+from qgis.gui import QgsMessageBar
+import qgis.utils
+
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtGui import QAction, QIcon
-# Initialize Qt resources from file resources.py
-import resources_rc
-# Import the code for the dialog
+
 from BritNatGridRef_dialog import BritNatGridRefDialog
-import os.path
-# QGIS stuff
-from qgis.core import *
-import qgis.utils
-from qgis.gui import QgsMessageBar
 
 class BritNatGridRef:
     """QGIS Plugin Implementation."""
@@ -255,17 +254,17 @@ class BritNatGridRef:
                                 # Add attributes
                                 attrs = self.dlg.textAttributes.text()
                                 if len(attrs) > 0:
-                                  # Just use comma delimited list
-                                  list = attrs.split(",")
-                                  print list
-                                  feat.setAttributes(list)
+                                    # Just use comma delimited list
+                                    list = attrs.split(",")
+                                    print list
+                                    feat.setAttributes(list)
                                   
                                 # Add the points  
                                 feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(int(e), int(n))))
                                 (res, outFeats) = layer.dataProvider().addFeatures([feat])
                                 
                                 if not res:
-                                  qgis.utils.iface.messageBar().pushMessage("Error", "An error occurred adding points", level=QgsMessageBar.CRITICAL)
+                                    qgis.utils.iface.messageBar().pushMessage("Error", "An error occurred adding points", level=QgsMessageBar.CRITICAL)
                                   
                                 # Must update the UI for user to enjoy the new points  
                                 layer.triggerRepaint()  
