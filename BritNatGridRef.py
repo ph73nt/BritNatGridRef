@@ -26,7 +26,7 @@ from qgis.gui import QgsMessageBar
 import qgis.utils
 
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
-from PyQt4.QtGui import QAction, QIcon
+from PyQt4.QtGui import QAction, QIcon, QFileDialog
 
 from BritNatGridRef_dialog import BritNatGridRefDialog
 
@@ -61,12 +61,21 @@ class BritNatGridRef:
 
         # Create the dialog (after translation) and keep reference
         self.dlg = BritNatGridRefDialog()
+        # Add actions
+        self.dlg.fileButton.clicked.connect(self.fileButtonClicked)
+        # Standard shortcut
+        self.dlg.fileButton.setShortcut('Ctrl+O')
 
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u'&BritNatGridRef')
         self.toolbar = self.iface.addToolBar(u'BritNatGridRef')
         self.toolbar.setObjectName(u'BritNatGridRef')
+
+    def fileButtonClicked(self):
+        #Show file picker dialogue
+        fname = QFileDialog.getOpenFileName(self.dlg, 'Open file', '')
+        self.dlg.fileNameField.setText(fname)
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
