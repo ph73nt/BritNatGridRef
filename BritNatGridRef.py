@@ -197,6 +197,16 @@ class BritNatGridRef:
         del self.toolbar
 
 
+    def badGridError(self):
+        
+        msg = self.msgBadGrid
+    
+        # Be a bit more verbose with the CSV errors
+        if self.CSVsOn:
+            msg += " at line "
+            msg += self.lineCount
+        
+        qgis.utils.iface.messageBar().pushMessage("Error", self.msgBadGrid, level=QgsMessageBar.CRITICAL)
 
     def addPoint(self, east, north, ref):
         
@@ -214,14 +224,7 @@ class BritNatGridRef:
             print l
             if l & 0x1: # bad news, shouldn't have an odd number of digits... bomb out!
                 
-                msg = self.msgBadGrid
-                
-                # Be a bit more verbose with the CSV errors
-                if self.CSVsOn:
-                    msg += " at line "
-                    msg += self.lineCount
-                
-                qgis.utils.iface.messageBar().pushMessage("Error", self.msgBadGrid, level=QgsMessageBar.CRITICAL)
+                self.badGridError()
                 return 1
             
             else:
@@ -263,10 +266,9 @@ class BritNatGridRef:
                     # Must update the UI for user to enjoy the new points
                     layer.triggerRepaint()
                 else:
-                    qgis.utils.iface.messageBar().pushMessage("Error", self.msgBadGrid, level=QgsMessageBar.CRITICAL) # Active layer not writable
-                        
+                    self.badGridError()    
         else:
-            qgis.utils.iface.messageBar().pushMessage("Error", self.msgBadGrid, level=QgsMessageBar.CRITICAL)
+            self.badGridError()
             return 1
         
         # Must be OK
@@ -331,9 +333,8 @@ class BritNatGridRef:
                     self.stayOpen = False
 
         except KeyError, e:
-
-            qgis.utils.iface.messageBar().pushMessage("Error", self.msgBadGrid, level=QgsMessageBar.CRITICAL)
-            print e
+                self.badGridError()
+                print e
           
         except AttributeError, e:
             # Occurs when no layer is selected... could occur for other reasons... let me know :)
