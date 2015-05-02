@@ -328,6 +328,9 @@ class BritNatGridRef:
                         # Get the delimiter and ensure it's in ASCII bytes (not default Unicode)
                         delim = self.dlg.delimiterField.text()
                         delim = delim.encode('latin-1')
+                        # What column is the grid ref in (use index 1 for user friendliness)?
+                        refCol = int(self.dlg.refColumnField.text())
+                        refCol -= 1
                         
                         # Open CSV file using our own delimiter... which is probably still a comma
                         with open(csvFileName, 'rb') as csvfile:
@@ -343,7 +346,7 @@ class BritNatGridRef:
     
                                 for cell in row:
                                     
-                                    if i == 0:
+                                    if i == refCol:
                                         gridRef = cell
                                     
                                     else:
