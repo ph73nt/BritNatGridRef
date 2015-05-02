@@ -29,6 +29,7 @@ from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtGui import QAction, QIcon, QFileDialog
 
 from BritNatGridRef_dialog import BritNatGridRefDialog
+from _sqlite3 import Row
 
 class BritNatGridRef:
     """QGIS Plugin Implementation."""
@@ -71,6 +72,14 @@ class BritNatGridRef:
         self.menu = self.tr(u'&BritNatGridRef')
         self.toolbar = self.iface.addToolBar(u'BritNatGridRef')
         self.toolbar.setObjectName(u'BritNatGridRef')
+        
+        # Options for CSV files
+        self.lineCount = 0
+        self.CSVsOn = False
+
+        # Prep error messages
+        self.msgBadGrid = "Sorry, I could not process the request; incorrect grid reference format"
+        self.msgNoLayer = "Sorry, an error occurred - check there is a writable active layer"
 
     def fileButtonClicked(self):
         #Show file picker dialogue
@@ -189,7 +198,7 @@ class BritNatGridRef:
 
 
 
-    def addPoint(self, msgBadGrid, east, north, ref):
+    def addPoint(self, east, north, ref):
         
         refLen = len(ref)
         
@@ -204,8 +213,17 @@ class BritNatGridRef:
             l = len(metres)
             print l
             if l & 0x1: # bad news, shouldn't have an odd number of digits... bomb out!
-                qgis.utils.iface.messageBar().pushMessage("Error", msgBadGrid, level=QgsMessageBar.CRITICAL)
+                
+                msg = self.msgBadGrid
+                
+                # Be a bit more verbose with the CSV errors
+                if self.CSVsOn:
+                    msg += " at line "
+                    msg += self.lineCount
+                
+                qgis.utils.iface.messageBar().pushMessage("Error", self.msgBadGrid, level=QgsMessageBar.CRITICAL)
                 return 1
+            
             else:
                 # Good news so far... even number of digits... split 'em in half and pad with zeroes
                 l /= 2
@@ -245,20 +263,16 @@ class BritNatGridRef:
                     # Must update the UI for user to enjoy the new points
                     layer.triggerRepaint()
                 else:
-                    qgis.utils.iface.messageBar().pushMessage("Error", msgBadGrid, level=QgsMessageBar.CRITICAL) # Active layer not writable
+                    qgis.utils.iface.messageBar().pushMessage("Error", self.msgBadGrid, level=QgsMessageBar.CRITICAL) # Active layer not writable
                         
         else:
-            qgis.utils.iface.messageBar().pushMessage("Error", msgBadGrid, level=QgsMessageBar.CRITICAL)
+            qgis.utils.iface.messageBar().pushMessage("Error", self.msgBadGrid, level=QgsMessageBar.CRITICAL)
             return 1
         
         # Must be OK
         return 0
 
     def run(self):
-
-        # Prep error messages
-        msgBadGrid = "Sorry, I could not process the request; incorrect grid reference format"
-        msgNoLayer = "Sorry, an error occurred - check there is a writable active layer"
       
         # Make hashtable of eastings and northings by grid reference
         east = {'HP':'4', 'HT':'3', 'HU':'4', 'HW':'1', 'HX':'2', 'HY':'3', 'HZ':'4', 'NA':'0', 'NB':'1', 'NC':'2', 'ND':'3', 'NF':'0', 'NG':'1', 'NH':'2', 'NJ':'3', 'NK':'4', 'NL':'0', 'NM':'1', 'NN':'2', 'NO':'3', 'NR':'1', 'NS':'2', 'NT':'3', 'NU':'4', 'NW':'1', 'NX':'2', 'NY':'3', 'NZ':'4', 'OV':'5', 'SC':'2', 'SD':'3', 'SE':'4', 'SH':'2', 'SJ':'3', 'SK':'4', 'SM':'1', 'SN':'2', 'SO':'3', 'SP':'4', 'SR':'1', 'SS':'2', 'ST':'3', 'SU':'4', 'SV':'0', 'SW':'1', 'SX':'2', 'SY':'3', 'SZ':'4', 'TA':'5', 'TF':'5', 'TG':'6', 'TL':'5', 'TM':'6', 'TQ':'5', 'TR':'6', 'TV':'5'}
@@ -283,7 +297,6 @@ class BritNatGridRef:
                     index = self.dlg.tabWidget.currentIndex();
                     
                     # Single entry
-                    print "Index = ", index
                     if index == 0:
                     
                         # Check if dialogue should stay open
@@ -292,7 +305,7 @@ class BritNatGridRef:
                         # Check for a match
                         ref = self.dlg.textGridRef.text()
                         
-                        addOkay = self.addPoint(msgBadGrid, east, north, ref)
+                        addOkay = self.addPoint(east, north, ref)
                         
                         if addOkay != 0:
                             self.stayOpen = False
@@ -300,17 +313,29 @@ class BritNatGridRef:
                     # Add CSV file 
                     elif index == 1:
                         
-                        index = 1
+                        # Get the CSV file name'
+                        csvFileName = self.dlg.fileNameField.text()
+                        # Get the delimiter and ensure it's in ASCII bytes (not default Unicode)
+                        delim = self.dlg.delimiterField.text()
+                        delim = delim.encode('latin-1')
+                        
+                        # Open CSV file using our own delimiter... which is probably still a comma
+                        with open(csvFileName, 'rb') as csvfile:
+                            r = csv.reader(csvfile, delimiter=delim)
+                            for row in r:
+                                print ', '.join(row)
+                                
+                        self.stayOpen = False
                     
                 else:
                     self.stayOpen = False
 
         except KeyError, e:
 
-            qgis.utils.iface.messageBar().pushMessage("Error", msgBadGrid, level=QgsMessageBar.CRITICAL)
+            qgis.utils.iface.messageBar().pushMessage("Error", self.msgBadGrid, level=QgsMessageBar.CRITICAL)
             print e
           
         except AttributeError, e:
             # Occurs when no layer is selected... could occur for other reasons... let me know :)
-            qgis.utils.iface.messageBar().pushMessage("Error", msgNoLayer, level=QgsMessageBar.CRITICAL)
+            qgis.utils.iface.messageBar().pushMessage("Error", self.msgNoLayer, level=QgsMessageBar.CRITICAL)
             print e
