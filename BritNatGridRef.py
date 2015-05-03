@@ -30,6 +30,10 @@ from PyQt4.QtGui import QAction, QIcon, QFileDialog
 
 from BritNatGridRef_dialog import BritNatGridRefDialog
 
+# Initialize Qt resources from file resources.py. Eclipse shows unused import warning,
+# but without this import the icon is not shown in QGIS menu or toolbar
+import resources_rc
+
 class BritNatGridRef:
     """QGIS Plugin Implementation."""
 
