@@ -29,7 +29,6 @@ from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtGui import QAction, QIcon, QFileDialog
 
 from BritNatGridRef_dialog import BritNatGridRefDialog
-from _sqlite3 import Row
 
 class BritNatGridRef:
     """QGIS Plugin Implementation."""
