@@ -223,14 +223,14 @@ class BritNatGridRef:
         
         if refLen > 3:
             code = ref[0:2].upper()
-            print code
+            #print code
             e = self.east[code]
             n = self.north[code]
-            print "East: ", e, " North: ", n
+            #print "East: ", e, " North: ", n
             # Should now have the northings and eastings values... now need to add some more precision
             metres = ref[2:]
             l = len(metres)
-            print l
+            # print l
             if l & 0x1: # bad news, shouldn't have an odd number of digits... bomb out!
                 
                 self.badGridError()
@@ -250,8 +250,8 @@ class BritNatGridRef:
                 # Add the metres onto the eastings and northings
                 e += eMetres
                 n += nMetres
-                print e
-                print n
+                # print e
+                # print n
                 
                 # Great... now have out coordinates in QGIS acceptable format... add a new point
                 # Get active layer
@@ -265,7 +265,7 @@ class BritNatGridRef:
                     # Add attributes
                     if len(attrs) > 0: # Just use comma delimited attList
                         attList = attrs.split(",")
-                        print attList
+                        # print attList
                         feat.setAttributes(attList)
                     
                     # Add the points
@@ -331,6 +331,10 @@ class BritNatGridRef:
                         # Get the delimiter and ensure it's in ASCII bytes (not default Unicode)
                         delim = self.dlg.delimiterField.text()
                         delim = delim.encode('latin-1')
+                        delimComma = True
+                        if delim != ",":
+                            delimComma = False
+                        # print "delimComma: ", delimComma
                         # What column is the grid ref in (use index 1 for user friendliness)?
                         refCol = int(self.dlg.refColumnField.text())
                         refCol -= 1
@@ -346,7 +350,7 @@ class BritNatGridRef:
                                 
                                 if (not hasHeader) or (j > 0):
                                 
-                                    print ', '.join(row)
+                                    # print ', '.join(row)
                                     self.lineCount += 1
                                     
                                     i = 0
@@ -359,13 +363,18 @@ class BritNatGridRef:
                                             gridRef = cell
                                         
                                         else:
-                                            attribs += cell
+                                            # When using a comma delimiter, don't want commas in the middle of a cell 
+                                            aString = cell
+                                            #print aString 
+                                            if delimComma:
+                                                aString = aString.replace(delim, ";")
+                                            attribs += aString
                                             attribs += ","
                                             
                                         i += 1
                                             
                                     print gridRef
-                                    print attribs
+                                    
                                     # Strip final comma
                                     attribs = attribs.rstrip(",")
                                     print attribs
