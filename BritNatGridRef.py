@@ -335,43 +335,52 @@ class BritNatGridRef:
                         refCol = int(self.dlg.refColumnField.text())
                         refCol -= 1
                         
+                        # Check if a header row exists
+                        hasHeader = self.dlg.headerRow.isChecked()
+                        
                         # Open CSV file using our own delimiter... which is probably still a comma
                         with open(csvFileName, 'rb') as csvfile:
                             r = csv.reader(csvfile, delimiter=delim)
+                            j = 0
                             for row in r:
                                 
-                                print ', '.join(row)
-                                self.lineCount += 1
+                                if (not hasHeader) or (j > 0):
                                 
-                                i = 0
-                                gridRef = ""
-                                attribs = ""
-    
-                                for cell in row:
+                                    print ', '.join(row)
+                                    self.lineCount += 1
                                     
-                                    if i == refCol:
-                                        gridRef = cell
-                                    
-                                    else:
-                                        attribs += cell
-                                        attribs += ","
+                                    i = 0
+                                    gridRef = ""
+                                    attribs = ""
+        
+                                    for cell in row:
                                         
-                                    i += 1
+                                        if i == refCol:
+                                            gridRef = cell
                                         
-                                print gridRef
-                                print attribs
-                                # Strip final comma
-                                attribs = attribs.rstrip(",")
-                                print attribs
+                                        else:
+                                            attribs += cell
+                                            attribs += ","
+                                            
+                                        i += 1
+                                            
+                                    print gridRef
+                                    print attribs
+                                    # Strip final comma
+                                    attribs = attribs.rstrip(",")
+                                    print attribs
+                                        
+                                    # Now add to grid
+                                    addOK = self.addPoint(gridRef, attribs)
                                     
-                                # Now add to grid
-                                addOK = self.addPoint(gridRef, attribs)
+                                    # Stop and report if an error occurs
+                                    if addOK != 0:
+                                        self.stayOpen = False
+                                        self.badGridError()
+                                        break
                                 
-                                # Stop and report if an error occurs
-                                if addOK != 0:
-                                    self.stayOpen = False
-                                    self.badGridError()
-                                    break
+                                j += 1
+                                
                                 
                         self.stayOpen = False
                     

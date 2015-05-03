@@ -35,11 +35,11 @@
      <x>10</x>
      <y>10</y>
      <width>391</width>
-     <height>151</height>
+     <height>161</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab1">
     <attribute name="title">
@@ -207,6 +207,22 @@
      </property>
      <property name="text">
       <string>Grid reference column:</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="headerRow">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>241</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Data has a header row</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>
